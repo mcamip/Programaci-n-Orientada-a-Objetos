@@ -1,0 +1,42 @@
+class Personas :
+    def __init__ (self,) :
+        self.nombres = input("Digite su nombre: ")
+        self.apellidos = input( "Digite su apellido: ")
+        self.direccion = input("Digite su dirección: ")
+    def consultarInfoPersonal (self):
+        return f"Nombres: {self.nombres}, Apellidos: {self.apellidos}, Dirección: {self.direccion}"
+    
+class Estudiante (Personas): 
+    def __init__ (self,Persona):
+        super().__init__()
+        self.Persona = Persona 
+        self.codigoEstudiante = int(input("Digite su codigo de estudiante: "))
+        self.PagoMatricula = 5000000
+    def consultarInfoPersonal (self):
+        return f"[Estudiante] {super().consultarInfoPersonal()}, Código: {self.codigoEstudiante}, Matrícula: {self.pagoMatricula}"
+    
+class Docente (Personas) :
+    def __init__(self):
+            super().__init__()
+    def consultarInfoPersonal (self):
+        return f"[Docente] {super().consultarInfoPersonal()}"
+    
+class Administrativo (Personas):
+    def __init__(self):
+        super().__init__()
+        self.salario = 1400000 
+    def consultarInfoPersonal (self):
+        return f"[Administrativo] {super().consultarInfoPersonal()}, Salario: {self.salario}"
+    
+   
+tipoDePersona = input("Usted es un Estudiante, un Docente o un Administrativo: ")
+if tipoDePersona =="estudiante":
+    Personas = Estudiante()
+elif tipoDePersona == "docente" :
+    Personas = Docente ()
+elif tipoDePersona == "administrativo" :
+    Personas = Administrativo()
+else: 
+    print("Ese tipo de persona no esta en el sistema")
+
+print("La informacion personal es: ", Personas.consultarInfoPersonal())
