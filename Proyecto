@@ -1,0 +1,27 @@
+class cliente: 
+    def __init__(self): 
+        self.nombre= input("Digites sus nombres: ")
+        self.apellidos= input("Digite sus apellidos: ")
+        self.numCelular= int(input("Digite su nomero de celular: "))
+        self.correoelectronico = input("Digite su correo electronico: ")
+
+class Pelicula: 
+    def __init__(self,):
+        self.tituloPeli = print("Buscando a Nemo")
+        self.duracion= print("140 minutos")
+        self.clasificacion=print("Familiar")
+        self.genero= print("aventura")
+class funcion: 
+    def __init__(self) :
+        self.horario = print("14:45")
+        self.precio= print(" 8.000 ")
+        self.sala = Sala
+        self.pelicula= Pelicula
+
+class Sala:
+    def __init__ (self):
+        self.numSala = 3
+        self.capacidad= 150
+        self.asientosDisponibles = AsientosDisponibles
+        self.asientosNoDisponibles= asientosNoDisponibles
+        
