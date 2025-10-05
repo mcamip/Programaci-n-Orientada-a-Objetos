@@ -1,0 +1,187 @@
+import math
+from abc import ABC, abstractmethod
+
+# ---------------------------------------------
+# Clase Punto2D
+# ---------------------------------------------
+class Punto2D:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def distancia(self, otro_punto):
+        """Calcula la distancia entre dos puntos."""
+        return math.sqrt((self.x - otro_punto.x)**2 + (self.y - otro_punto.y)**2)
+
+
+# ---------------------------------------------
+# Clase abstracta Figura
+# ---------------------------------------------
+class Figura(ABC):
+    def __init__(self, color, descripcion):
+        self._color = color
+        self._descripcion = descripcion
+
+    # Métodos abstractos
+    @abstractmethod
+    def perimetro(self):
+        pass
+
+    @abstractmethod
+    def area(self):
+        pass
+
+    # Métodos get/set
+    def get_color(self):
+        return self._color
+
+    def set_color(self, color):
+        self._color = color
+
+    def get_descripcion(self):
+        return self._descripcion
+
+    def set_descripcion(self, descripcion):
+        self._descripcion = descripcion
+
+
+# ---------------------------------------------
+# Clase abstracta Cuadrilatero
+# ---------------------------------------------
+class Cuadrilatero(Figura, ABC):
+    def __init__(self, p1, p2, p3, p4, color, descripcion):
+        super().__init__(color, descripcion)
+        self._p1 = p1
+        self._p2 = p2
+        self._p3 = p3
+        self._p4 = p4
+
+
+# ---------------------------------------------
+# Clase abstracta Triangulo
+# ---------------------------------------------
+class Triangulo(Figura, ABC):
+    def __init__(self, p1, p2, p3, color, descripcion):
+        super().__init__(color, descripcion)
+        self._p1 = p1
+        self._p2 = p2
+        self._p3 = p3
+
+    def perimetro(self):
+        return (self._p1.distancia(self._p2) +
+                self._p2.distancia(self._p3) +
+                self._p3.distancia(self._p1))
+
+
+# ---------------------------------------------
+# Clases hijas de Cuadrilatero
+# ---------------------------------------------
+class Cuadrado(Cuadrilatero):
+    def perimetro(self):
+        lado = self._p1.distancia(self._p2)
+        return 4 * lado
+
+    def area(self):
+        lado = self._p1.distancia(self._p2)
+        return lado ** 2
+
+
+class Rectangulo(Cuadrilatero):
+    def perimetro(self):
+        base = self._p1.distancia(self._p2)
+        altura = self._p2.distancia(self._p3)
+        return 2 * (base + altura)
+
+    def area(self):
+        base = self._p1.distancia(self._p2)
+        altura = self._p2.distancia(self._p3)
+        return base * altura
+
+
+class Trapecio(Cuadrilatero):
+    def perimetro(self):
+        return (self._p1.distancia(self._p2) +
+                self._p2.distancia(self._p3) +
+                self._p3.distancia(self._p4) +
+                self._p4.distancia(self._p1))
+
+    def area(self):
+        # Usamos fórmula del trapecio: A = ((B + b) * h) / 2
+        base_mayor = self._p3.distancia(self._p4)
+        base_menor = self._p1.distancia(self._p2)
+        altura = abs(self._p1.y - self._p3.y)
+        return ((base_mayor + base_menor) * altura) / 2
+
+
+# ---------------------------------------------
+# Clases hijas de Triangulo
+# ---------------------------------------------
+class Isosceles(Triangulo):
+    def area(self):
+        # Herón
+        a = self._p1.distancia(self._p2)
+        b = self._p2.distancia(self._p3)
+        c = self._p3.distancia(self._p1)
+        s = (a + b + c) / 2
+        return math.sqrt(s * (s - a) * (s - b) * (s - c))
+
+
+class Escaleno(Triangulo):
+    def area(self):
+        # También Herón
+        a = self._p1.distancia(self._p2)
+        b = self._p2.distancia(self._p3)
+        c = self._p3.distancia(self._p1)
+        s = (a + b + c) / 2
+        return math.sqrt(s * (s - a) * (s - b) * (s - c))
+
+
+class RectanguloTriangulo(Triangulo):
+    """Triángulo rectángulo (por claridad educativa)."""
+    def area(self):
+        base = self._p1.distancia(self._p2)
+        altura = self._p1.distancia(self._p3)
+        return (base * altura) / 2
+
+
+# ---------------------------------------------
+# Clase de Presentación (main)
+# ---------------------------------------------
+class Presentacion:
+    def main(self):
+        print("=== FIGURAS GEOMÉTRICAS ===")
+
+        # ---- Cuadriláteros ----
+        cuadrado = Cuadrado(Punto2D(0,0), Punto2D(0,2), Punto2D(2,2), Punto2D(2,0),
+                             "Amarillo", "Cuadrado regular")
+
+        rectangulo = Rectangulo(Punto2D(0,0), Punto2D(0,3), Punto2D(5,3), Punto2D(5,0),
+                                 "Verde", "Rectángulo")
+
+        trapecio = Trapecio(Punto2D(0,0), Punto2D(4,0), Punto2D(3,2), Punto2D(1,2),
+                             "Azul", "Trapecio regular")
+
+        # ---- Triángulos ----
+        isosceles = Isosceles(Punto2D(0,0), Punto2D(2,0), Punto2D(1,3),
+                               "Rojo", "Triángulo isósceles")
+
+        escaleno = Escaleno(Punto2D(0,0), Punto2D(4,0), Punto2D(2,3),
+                             "Morado", "Triángulo escaleno")
+
+        rect_triangulo = RectanguloTriangulo(Punto2D(0,0), Punto2D(3,0), Punto2D(0,4),
+                                             "Naranja", "Triángulo rectángulo")
+
+        figuras = [cuadrado, rectangulo, trapecio, isosceles, escaleno, rect_triangulo]
+
+        for f in figuras:
+            print(f"\nFigura: {f.get_descripcion()} ({f.get_color()})")
+            print(f"Perímetro: {f.perimetro():.2f}")
+            print(f"Área: {f.area():.2f}")
+
+
+# ---------------------------------------------
+# Ejecución
+# ---------------------------------------------
+if __name__ == "__main__":
+    app = Presentacion()
+    app.main()
